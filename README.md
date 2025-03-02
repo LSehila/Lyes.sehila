@@ -12,3 +12,5 @@ Squadro est un jeu de stratégie où chaque joueur doit manœuvrer ses pions de 
 - **CSS3** : pour le design et la mise en forme
 - **PHP (POO)** : pour la logique métier et la gestion dynamique du jeu
 
+Aperçu : 
+![Squadro](Squadro.png)
