@@ -1,0 +1,84 @@
+<?php
+
+require_once '../src/PieceSquadro.php';
+require_once '../src/PlateauSquadro.php';
+require_once '../src/PieceSquadroUI.php';
+
+use Squadro\PieceSquadro;
+use Squadro\PlateauSquadro;
+use Squadro\PieceSquadroUI;
+
+/**
+ * Fonction d'assertion simple avec émoji.
+ */
+function assertEqual($expected, $actual, string $message): void {
+    if ($expected === $actual) {
+        echo "<p style='color:green;'>✅ Test validé - $message</p>";
+    } else {
+        echo "<p style='color:red;'>❌ Test non validé - $message<br>";
+        echo "   Attendu: " . htmlspecialchars(print_r($expected, true)) . "<br>";
+        echo "   Obtenu: " . htmlspecialchars(print_r($actual, true)) . "</p>";
+    }
+}
+
+echo "<h2>Tests pour la classe PieceSquadroUI</h2>";
+
+// Création d'un plateau de test
+$plateau = new PlateauSquadro();
+
+// Test: generationCaseVide()
+$htmlVide = PieceSquadroUI::generationCaseVide();
+echo "<h3>Test: generationCaseVide()</h3>";
+if (strpos($htmlVide, 'bg-gradient-to-r') !== false && strpos($htmlVide, 'disabled') !== false) {
+    echo "<p style='color:green;'>✅ Test validé - generationCaseVide()</p>";
+} else {
+    echo "<p style='color:red;'>❌ Test non validé - generationCaseVide()</p>";
+}
+
+// Test: generationCaseNeutre()
+$htmlNeutre = PieceSquadroUI::generationCaseNeutre();
+echo "<h3>Test: generationCaseNeutre()</h3>";
+if (strpos($htmlNeutre, 'bg-gradient-to-r') !== false && strpos($htmlNeutre, 'disabled') !== false) {
+    echo "<p style='color:green;'>✅ Test validé - generationCaseNeutre()</p>";
+} else {
+    echo "<p style='color:red;'>❌ Test non validé - generationCaseNeutre()</p>";
+}
+
+// Test: generationCaseRouge(3)
+$htmlRouge = PieceSquadroUI::generationCaseRouge(3);
+echo "<h3>Test: generationCaseRouge(3)</h3>";
+if (strpos($htmlRouge, 'bg-red-500') !== false && strpos($htmlRouge, '3') !== false) {
+    echo "<p style='color:green;'>✅ Test validé - generationCaseRouge()</p>";
+} else {
+    echo "<p style='color:red;'>❌ Test non validé - generationCaseRouge()</p>";
+}
+
+// Test: generationPiece()
+// On teste pour la pièce en (3,0) (supposée être une pièce blanche)
+$piece = $plateau->getPiece(3, 0);
+if ($piece->getCouleur() === PieceSquadro::BLANC) {
+    $htmlPiece = PieceSquadroUI::generationPiece($piece, 3, 0, true, $plateau);
+    echo "<h3>Test: generationPiece() pour une pièce blanche en (3,0)</h3>";
+    if (strpos($htmlPiece, 'action="traiteActionSquadro.php"') !== false &&
+        strpos($htmlPiece, 'ChoisirPiece') !== false &&
+        strpos($htmlPiece, 'value="3"') !== false &&
+        strpos($htmlPiece, 'value="0"') !== false) {
+        echo "<p style='color:green;'>✅ Test validé - generationPiece()</p>";
+    } else {
+        echo "<p style='color:red;'>❌ Test non validé - generationPiece()</p>";
+    }
+} else {
+    echo "<h3>Test: generationPiece() - La pièce en (3,0) n'est pas blanche, test non effectué.</h3>";
+}
+
+// Test: generatePlateau()
+$htmlPlateau = PieceSquadroUI::generatePlateau($plateau, PieceSquadro::BLANC);
+echo "<h3>Test: generatePlateau()</h3>";
+if (strpos($htmlPlateau, '<table') !== false && strpos($htmlPlateau, 'animate-scale-up') !== false) {
+    echo "<p style='color:green;'>✅ Test validé - generatePlateau()</p>";
+} else {
+    echo "<p style='color:red;'>❌ Test non validé - generatePlateau()</p>";
+}
+
+echo "<h2>Fin des tests pour PieceSquadroUI</h2>";
+?>
